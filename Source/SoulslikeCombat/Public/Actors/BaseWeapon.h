@@ -22,5 +22,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 		bool bIsAttachedToHand = false;
+
+	virtual void OnEquipped(ASoulslikeCombatCharacter* PlayerCharacter) override;
 	
 };

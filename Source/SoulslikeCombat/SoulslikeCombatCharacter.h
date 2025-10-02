@@ -40,8 +40,13 @@ class ASoulslikeCombatCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	//* Draw Sheath Weapon Action
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ToggleCombatAction;
+
+	//* Interact Action
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* InteractAction;
 
 public:
 	ASoulslikeCombatCharacter();
@@ -55,8 +60,11 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-	// Equip and Unequip Weapon
+	//* Equip and Unequip Weapon
 	void ToggleCombat(const FInputActionValue& Value);
+
+	//* Interact with scene objects
+	void Interact(const FInputActionValue& Value);
 			
 
 protected:
@@ -77,19 +85,15 @@ public:
 
 	FORCEINLINE TObjectPtr<ABaseWeapon> ReturnMainWeapon() { return MainWeapon; }
 
-private:
+	FORCEINLINE void SetMainWeapon(TObjectPtr<ABaseWeapon> Weapon) { if (Weapon) MainWeapon = Weapon; }
 
-	UPROPERTY(EditDefaultsOnly, Category = "Debug")
-		TSubclassOf<ABaseWeapon> Debug_WeaponToSpawn;
+private:
 
 	UPROPERTY(EditAnywhere, Category = "AnimNotify")
 		UAnimMontage* DrawWeaponAnimNotify;
 
 	UPROPERTY(EditAnywhere, Category = "AnimNotify")
 		UAnimMontage* SheathWeaponAnimNotify;
-
-	UFUNCTION(BlueprintCallable)
-		void Debug_SpawnWeapon();
 	
 };
 

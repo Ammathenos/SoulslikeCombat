@@ -2,6 +2,8 @@
 
 
 #include "Actors/BaseEquippable.h"
+#include "SoulslikeCombat/DebugMacros.h"
+#include "SoulslikeCombat/SoulslikeCombatCharacter.h"
 #include "GameFramework/Character.h"
 
 // Sets default values
@@ -36,10 +38,10 @@ UPrimitiveComponent* ABaseEquippable::GetItemMesh()
 	return ItemSkeletalMesh;
 }
 
-void ABaseEquippable::OnEquipped()
+void ABaseEquippable::OnEquipped(ASoulslikeCombatCharacter* PlayerCharacter)
 {
 	bIsEquipped = true;
-	AttachActor(AttachSocketName);
+	AttachActor(AttachSocketName, PlayerCharacter);
 }
 
 void ABaseEquippable::OnUnequipped()
@@ -50,13 +52,13 @@ void ABaseEquippable::OnUnequipped()
 	}
 }
 
-void ABaseEquippable::AttachActor(FName SocketName)
+void ABaseEquippable::AttachActor(FName SocketName, ASoulslikeCombatCharacter* PlayerCharacter)
 {
 	USkeletalMeshComponent* CharacterMesh;
 
-	if (Cast<ACharacter>(GetOwner())->GetMesh())
+	if (PlayerCharacter)
 	{
-		CharacterMesh = Cast<ACharacter>(GetOwner())->GetMesh();		
+		CharacterMesh = PlayerCharacter->GetMesh();
 		AttachToComponent(CharacterMesh, FAttachmentTransformRules::SnapToTargetIncludingScale, SocketName);
 	}
 }

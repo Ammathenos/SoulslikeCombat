@@ -7,7 +7,9 @@
 #include "Actors/BaseWeapon.h"
 #include "Actors/BaseEquippable.h"
 #include "DebugMacros.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "AnimNotifies/AttachWeaponActor.h"
+#include "Interfaces/Interactable.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -68,24 +70,6 @@ void ASoulslikeCombatCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-	Debug_SpawnWeapon();
-}
-
-void ASoulslikeCombatCharacter::Debug_SpawnWeapon()
-{
-	if (GetWorld() && Debug_WeaponToSpawn)
-	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = this;
-		SpawnParams.Instigator = this;
-
-		MainWeapon = GetWorld()->SpawnActor<ABaseWeapon>(Debug_WeaponToSpawn, GetActorTransform(), SpawnParams);
-	}
-
-		if (MainWeapon)
-		{
-			MainWeapon->OnEquipped();
-		}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -106,7 +90,11 @@ void ASoulslikeCombatCharacter::SetupPlayerInputComponent(class UInputComponent*
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASoulslikeCombatCharacter::Look);
 
+		//Draw Sheath Weapon
 		EnhancedInputComponent->BindAction(ToggleCombatAction, ETriggerEvent::Completed, this, &ASoulslikeCombatCharacter::ToggleCombat);
+
+		//Interact
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Completed, this, &ASoulslikeCombatCharacter::Interact);
 
 	}
 
@@ -172,8 +160,28 @@ void ASoulslikeCombatCharacter::ToggleCombat(const FInputActionValue& Value)
 	}
 }
 
+void ASoulslikeCombatCharacter::Interact(const FInputActionValue& Value)
+{
+	if (Controller != nullptr)
+	{
+		TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_GameTraceChannel1));
 
+		TArray<AActor*> ActorsToIgnore;
+		ActorsToIgnore.Add(this);
 
+		FHitResult SphereHit;
 
-
-
+		if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetActorLocation(), GetActorLocation(), 100, ObjectTypes, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, SphereHit, true))
+		{
+			if (SphereHit.GetActor())
+			{
+				IInteractable* InteractInterface = Cast<IInteractable>(SphereHit.GetActor());
+				if (InteractInterface)
+				{
+					InteractInterface->Interact(this);
+				}
+			}
+		}
+	}
+}

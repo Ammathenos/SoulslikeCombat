@@ -19,11 +19,11 @@ void UAttachWeaponActor::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceB
 		switch (AttachToHand)
 		{
 		case false:
-			MainWeapon->AttachActor(MainWeapon->ReturnAttachSocketName());
+			MainWeapon->AttachActor(MainWeapon->ReturnAttachSocketName(), PlayerCharacter);
 			break;
 
 		case true:
-			MainWeapon->AttachActor(MainWeapon->ReturnHandSocketName());
+			MainWeapon->AttachActor(MainWeapon->ReturnHandSocketName(), PlayerCharacter);
 			break;
 		}
 	}

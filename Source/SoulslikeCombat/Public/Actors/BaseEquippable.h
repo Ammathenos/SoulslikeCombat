@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BaseEquippable.generated.h"
 
+class ASoulslikeCombatCharacter;
+
 UCLASS()
 class SOULSLIKECOMBAT_API ABaseEquippable : public AActor
 {
@@ -17,13 +19,13 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-		void OnEquipped();
+		virtual void OnEquipped(ASoulslikeCombatCharacter* PlayerCharacter);
 
 	UFUNCTION(BlueprintCallable)
 		void OnUnequipped();
 
 	UFUNCTION(BlueprintCallable)
-		void AttachActor(FName SocketName);
+		void AttachActor(FName SocketName, ASoulslikeCombatCharacter* PlayerCharacter);
 
 	FORCEINLINE FName ReturnAttachSocketName() { return AttachSocketName; }
 

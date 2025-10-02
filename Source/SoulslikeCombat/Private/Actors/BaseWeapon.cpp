@@ -2,4 +2,15 @@
 
 
 #include "Actors/BaseWeapon.h"
+#include "SoulslikeCombat/SoulslikeCombatCharacter.h"
+#include "SoulslikeCombat/DebugMacros.h"
 
+void ABaseWeapon::OnEquipped(ASoulslikeCombatCharacter* PlayerCharacter)
+{
+	Super::OnEquipped(PlayerCharacter);
+
+	if (PlayerCharacter)
+	{
+		PlayerCharacter->SetMainWeapon(this);
+	}
+}
