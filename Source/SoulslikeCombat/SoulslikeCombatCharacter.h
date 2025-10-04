@@ -82,18 +82,11 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
+	//* Returns player MainWeapon 
 	FORCEINLINE TObjectPtr<ABaseWeapon> ReturnMainWeapon() { return MainWeapon; }
-
+	//* Sets player MainWeapon
 	FORCEINLINE void SetMainWeapon(TObjectPtr<ABaseWeapon> Weapon) { if (Weapon) MainWeapon = Weapon; }
 
 private:
-
-	UPROPERTY(EditAnywhere, Category = "AnimNotify")
-		UAnimMontage* DrawWeaponAnimNotify;
-
-	UPROPERTY(EditAnywhere, Category = "AnimNotify")
-		UAnimMontage* SheathWeaponAnimNotify;
-	
 };
 

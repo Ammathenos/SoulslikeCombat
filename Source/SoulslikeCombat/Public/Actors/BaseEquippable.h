@@ -18,15 +18,16 @@ public:
 	ABaseEquippable();
 	virtual void Tick(float DeltaTime) override;
 
+	//* Equips player character with an equippable
 	UFUNCTION(BlueprintCallable)
 		virtual void OnEquipped(ASoulslikeCombatCharacter* PlayerCharacter);
-
+	//* Unequips player character from an equippable
 	UFUNCTION(BlueprintCallable)
 		void OnUnequipped();
-
+	//* Attach equippable to player character socket
 	UFUNCTION(BlueprintCallable)
 		void AttachActor(FName SocketName, ASoulslikeCombatCharacter* PlayerCharacter);
-
+	//* Returns AttachSocketName
 	FORCEINLINE FName ReturnAttachSocketName() { return AttachSocketName; }
 
 protected:

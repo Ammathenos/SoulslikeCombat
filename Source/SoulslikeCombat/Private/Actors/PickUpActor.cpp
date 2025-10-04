@@ -36,7 +36,7 @@ void APickUpActor::Interact(TObjectPtr<AActor> Caller)
 		if (GetWorld() && Item)
 		{
 			FActorSpawnParameters SpawnParams;
-			SpawnParams.Owner = this;
+			SpawnParams.Owner = Caller;
 			SpawnParams.Instigator = Cast<APawn>(Caller);
 
 			ABaseEquippable* ItemSpawned;

@@ -25,9 +25,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	//* Interact function overrided from IInteractable interface, spawn and equips a BaseEquippable to player character
 	virtual void Interact(TObjectPtr<AActor> Caller) override;
-
-	
 
 	UPROPERTY(EditAnywhere, Category = "SpawnEquip")
 		TSubclassOf<ABaseEquippable> Item;

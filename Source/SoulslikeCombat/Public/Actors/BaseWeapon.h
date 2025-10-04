@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Actors/BaseEquippable.h"
+#include "Enums/CombatTypes.h"
 #include "BaseWeapon.generated.h"
 
-/**
- * 
- */
+class UAnimMontage;
+
 UCLASS()
 class SOULSLIKECOMBAT_API ABaseWeapon : public ABaseEquippable
 {
@@ -18,11 +18,30 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "Initialization")
 		FName HandSocketName = "None";
 
+	//* Returns HandSocketName
 	FORCEINLINE FName ReturnHandSocketName() { return HandSocketName; }
 
+	//* Overrided function from BaseEquippable, sets player character MainWeapon
+	virtual void OnEquipped(ASoulslikeCombatCharacter* PlayerCharacter) override;
+
+	UPROPERTY(EditAnywhere, Category = "Animations")
+		UAnimMontage* EnterCombat;
+
+	FORCEINLINE UAnimMontage* ReturnEnterCombatAnimMontage() { return EnterCombat; }
+
+	UPROPERTY(EditAnywhere, Category = "Animations")
+		UAnimMontage* ExitCombat;
+
+	FORCEINLINE UAnimMontage* ReturnExitCombatAnimMontage() { return ExitCombat; }
+	
+	UPROPERTY(VisibleAnywhere, Category = "Initialization")
+		ECombatTypes CombatType;
+
+	void SetAttachedToHand(bool IsAttachedToHandLocal);
+
+	FORCEINLINE bool ReturnIsAttachedToHands() { return bIsAttachedToHand; }
+
+private:
 	UPROPERTY(VisibleAnywhere)
 		bool bIsAttachedToHand = false;
-
-	virtual void OnEquipped(ASoulslikeCombatCharacter* PlayerCharacter) override;
-	
 };

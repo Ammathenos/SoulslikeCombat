@@ -136,30 +136,32 @@ void ASoulslikeCombatCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+//Draw and sheath weapon input
 void ASoulslikeCombatCharacter::ToggleCombat(const FInputActionValue& Value)
 {
 	if (Controller != nullptr)
 	{
-		int32 valor = 10;
-
 		if (MainWeapon)
 		{
-			switch (MainWeapon->bIsAttachedToHand)
+			switch (MainWeapon->ReturnIsAttachedToHands())
 			{
+			//Sheath Weapon
 			case true:
-				PlayAnimMontage(SheathWeaponAnimNotify);
-				MainWeapon->bIsAttachedToHand = false;
+				PlayAnimMontage(MainWeapon->ReturnExitCombatAnimMontage());
+				MainWeapon->SetAttachedToHand(false);
 				break;
 
+			//Draw Weapon
 			case false:
-				PlayAnimMontage(DrawWeaponAnimNotify);
-				MainWeapon->bIsAttachedToHand = true;
+				PlayAnimMontage(MainWeapon->ReturnEnterCombatAnimMontage());
+				MainWeapon->SetAttachedToHand(true);
 				break;
 			}
 		}
 	}
 }
 
+//* Interact input
 void ASoulslikeCombatCharacter::Interact(const FInputActionValue& Value)
 {
 	if (Controller != nullptr)
@@ -172,10 +174,12 @@ void ASoulslikeCombatCharacter::Interact(const FInputActionValue& Value)
 
 		FHitResult SphereHit;
 
+		// Sphere trace for interactable actors in scene
 		if (UKismetSystemLibrary::SphereTraceSingleForObjects(this, GetActorLocation(), GetActorLocation(), 100, ObjectTypes, false, ActorsToIgnore, EDrawDebugTrace::ForDuration, SphereHit, true))
 		{
 			if (SphereHit.GetActor())
 			{
+				//  Called Interact function from IInteractable interface
 				IInteractable* InteractInterface = Cast<IInteractable>(SphereHit.GetActor());
 				if (InteractInterface)
 				{

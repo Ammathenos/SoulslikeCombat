@@ -7,4 +7,5 @@ AToughSword::AToughSword()
 {
 	AttachSocketName = "SwordHipAttachSocket";
 	HandSocketName = "WeaponSocket";
+	CombatType = ECombatTypes::ECT_LightSword;
 }
