@@ -164,13 +164,11 @@ void ASoulslikeCombatCharacter::ToggleCombat(const FInputActionValue& Value)
 			//Sheath Weapon
 			case true:
 				PlayAnimMontage(PlayerWeapon->ReturnExitCombatAnimMontage());
-				CombatComponent->SetCombatEnabled(false);
 				break;
 
 			//Draw Weapon
 			case false:
 				PlayAnimMontage(PlayerWeapon->ReturnEnterCombatAnimMontage());
-				CombatComponent->SetCombatEnabled(true);
 				break;
 			}
 		}

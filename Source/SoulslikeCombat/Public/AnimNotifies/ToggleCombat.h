@@ -4,21 +4,21 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
-#include "AttachWeaponActor.generated.h"
+#include "ToggleCombat.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SOULSLIKECOMBAT_API UAttachWeaponActor : public UAnimNotify
+class SOULSLIKECOMBAT_API UToggleCombat : public UAnimNotify
 {
 	GENERATED_BODY()
 
 public:
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 
-public:
-	FName AttachSocketName;
+	UPROPERTY(EditAnywhere)
+		bool EnableCombat = true;
 
 protected:
 

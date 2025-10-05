@@ -16,12 +16,10 @@ void UAttachWeaponActor::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceB
 	UCombatComponent* PlayerCombatComponent = PlayerCharacter->GetCombatComponent();
 	if (!PlayerCombatComponent) return;
 
-	if (ABaseWeapon* PlayerWeapon =  PlayerCombatComponent->GetMainWeapon())
+	if (ABaseWeapon* PlayerWeapon = PlayerCombatComponent->GetMainWeapon())
 	{
-		FName SocketName = AttachToHand ? PlayerWeapon->ReturnHandSocketName() : PlayerWeapon->ReturnAttachSocketName();
-
-		PlayerWeapon->AttachActor(SocketName, PlayerCharacter);
-
-		
+		PlayerWeapon->AttachActor(AttachSocketName, PlayerCharacter);
 	}
+	else return;
+
 }
