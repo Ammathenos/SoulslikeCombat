@@ -74,9 +74,6 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		TObjectPtr<ABaseWeapon> MainWeapon;
-
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -87,6 +84,17 @@ public:
 	//* Sets player MainWeapon
 	FORCEINLINE void SetMainWeapon(TObjectPtr<ABaseWeapon> Weapon) { if (Weapon) MainWeapon = Weapon; }
 
+	void SetNewMainWeapon(TObjectPtr<ABaseWeapon> NewWeapon);
+
+	void SetCombatEnabled(bool CombatEnabledLocal);
+
+	FORCEINLINE bool IsCombatEnabled() { return bCombatEnabled; };
+
 private:
+	UPROPERTY(EditAnywhere)
+		TObjectPtr<ABaseWeapon> MainWeapon;
+
+	UPROPERTY(EditAnywhere)
+		bool bCombatEnabled = false;
 };
 

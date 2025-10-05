@@ -10,6 +10,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "AnimNotifies/AttachWeaponActor.h"
 #include "Interfaces/Interactable.h"
+#include "Interfaces/AnimationInstance.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -69,6 +70,28 @@ void ASoulslikeCombatCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+	}
+}
+
+void ASoulslikeCombatCharacter::SetNewMainWeapon(TObjectPtr<ABaseWeapon> NewWeapon)
+{
+	if (MainWeapon)
+	{
+		MainWeapon->OnUnequipped();
+		MainWeapon->Destroy();
+	}
+
+	MainWeapon = NewWeapon;
+}
+
+void ASoulslikeCombatCharacter::SetCombatEnabled(bool CombatEnabledLocal)
+{
+	bCombatEnabled = CombatEnabledLocal;
+	IAnimationInstance* AnimInstanceInterface = Cast<IAnimationInstance>(GetMesh()->GetAnimInstance());
+
+	if (AnimInstanceInterface)
+	{
+		AnimInstanceInterface->UpdateCombatEnabled(bCombatEnabled);
 	}
 }
 
@@ -143,18 +166,18 @@ void ASoulslikeCombatCharacter::ToggleCombat(const FInputActionValue& Value)
 	{
 		if (MainWeapon)
 		{
-			switch (MainWeapon->ReturnIsAttachedToHands())
+			switch (IsCombatEnabled())
 			{
 			//Sheath Weapon
 			case true:
 				PlayAnimMontage(MainWeapon->ReturnExitCombatAnimMontage());
-				MainWeapon->SetAttachedToHand(false);
+				SetCombatEnabled(false);
 				break;
 
 			//Draw Weapon
 			case false:
 				PlayAnimMontage(MainWeapon->ReturnEnterCombatAnimMontage());
-				MainWeapon->SetAttachedToHand(true);
+				SetCombatEnabled(true);
 				break;
 			}
 		}

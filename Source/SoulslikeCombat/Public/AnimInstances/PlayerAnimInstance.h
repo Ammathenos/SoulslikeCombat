@@ -18,12 +18,11 @@ class SOULSLIKECOMBAT_API UPlayerAnimInstance : public UAnimInstance, public IAn
 public:
 	virtual void UpdateCombatType(ECombatTypes CombatType) override;
 
-	virtual void UpdateWeaponAttachedToHand(bool AttachedToHand) override;
+	virtual void UpdateCombatEnabled(bool CombatEnabled) override;
 
 	UPROPERTY(BlueprintReadOnly)
 		ECombatTypes CombatTypeLocal = ECombatTypes::ECT_None;
 
 	UPROPERTY(BlueprintReadOnly)
-		bool AttachedToHandLocal;
-	
+		bool CombatEnabledLocal;
 };

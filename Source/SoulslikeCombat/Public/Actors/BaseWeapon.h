@@ -35,13 +35,7 @@ public:
 	FORCEINLINE UAnimMontage* ReturnExitCombatAnimMontage() { return ExitCombat; }
 	
 	UPROPERTY(VisibleAnywhere, Category = "Initialization")
-		ECombatTypes CombatType;
-
-	void SetAttachedToHand(bool IsAttachedToHandLocal);
-
-	FORCEINLINE bool ReturnIsAttachedToHands() { return bIsAttachedToHand; }
+		ECombatTypes CombatType = ECombatTypes::ECT_None;
 
 private:
-	UPROPERTY(VisibleAnywhere)
-		bool bIsAttachedToHand = false;
 };

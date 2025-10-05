@@ -13,8 +13,7 @@ void UAttachWeaponActor::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceB
 	
 	if (PlayerCharacter)
 	{
-		ABaseWeapon* MainWeapon;
-		MainWeapon = PlayerCharacter->ReturnMainWeapon();
+		ABaseWeapon* MainWeapon = PlayerCharacter->ReturnMainWeapon();
 		
 		switch (AttachToHand)
 		{

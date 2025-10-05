@@ -3,13 +3,14 @@
 
 #include "AnimInstances/PlayerAnimInstance.h"
 #include "SoulslikeCombat/DebugMacros.h"
+#include "SoulslikeCombat/DebugMacros.h"
 
 void UPlayerAnimInstance::UpdateCombatType(ECombatTypes CombatType)
 {
 	CombatTypeLocal = CombatType;
 }
 
-void UPlayerAnimInstance::UpdateWeaponAttachedToHand(bool AttachedToHand)
+void UPlayerAnimInstance::UpdateCombatEnabled(bool CombatEnabled)
 {
-	AttachedToHandLocal = AttachedToHand;
+	CombatEnabledLocal = CombatEnabled;
 }

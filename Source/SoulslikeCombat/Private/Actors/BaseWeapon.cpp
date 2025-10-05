@@ -9,35 +9,32 @@
 
 void ABaseWeapon::OnEquipped(ASoulslikeCombatCharacter* PlayerCharacter)
 {
-	Super::OnEquipped(PlayerCharacter);
+	//Super::OnEquipped(PlayerCharacter);
+
+	FName SocketName;
+	SetIsEquipped(true);
 
 	if (PlayerCharacter)
 	{
-		PlayerCharacter->SetMainWeapon(this);
+		switch (PlayerCharacter->IsCombatEnabled())
+		{
+		case false:
+			SocketName = AttachSocketName;
+			break;
+
+		case true:
+			SocketName = HandSocketName;
+			break;
+		}
+
+		AttachActor(SocketName, PlayerCharacter);
+		PlayerCharacter->SetNewMainWeapon(this);
 		UPlayerAnimInstance* PlayerAnimInstanceVar = Cast<UPlayerAnimInstance>(PlayerCharacter->GetMesh()->GetAnimInstance());
 
 		if (PlayerAnimInstanceVar)
 		{
 			PlayerAnimInstanceVar->UpdateCombatType(CombatType);
-		}
-
-	}
-}
-
-void ABaseWeapon::SetAttachedToHand(bool IsAttachedToHandLocal)
-{
-	bIsAttachedToHand = IsAttachedToHandLocal;
-
-	ASoulslikeCombatCharacter* PlayerCharacter = Cast<ASoulslikeCombatCharacter>(GetOwner());
-
-	if (PlayerCharacter)
-	{
-		UPlayerAnimInstance* PlayerAnimInstance;
-		PlayerAnimInstance = Cast<UPlayerAnimInstance>(PlayerCharacter->GetMesh()->GetAnimInstance());
-
-		if (PlayerAnimInstance)
-		{
-			PlayerAnimInstance->UpdateWeaponAttachedToHand(bIsAttachedToHand);
+			//DEBUG_PRINT2(CombatType);
 		}
 	}
 }

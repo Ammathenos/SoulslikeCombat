@@ -25,5 +25,5 @@ class SOULSLIKECOMBAT_API IAnimationInstance
 public:
 		virtual void UpdateCombatType(ECombatTypes CombatType) = 0;
 		
-		virtual void UpdateWeaponAttachedToHand(bool AttachedToHand) = 0;
+		virtual void UpdateCombatEnabled(bool CombatEnabled) = 0;
 };
