@@ -5,36 +5,26 @@
 #include "SoulslikeCombat/SoulslikeCombatCharacter.h"
 #include "SoulslikeCombat/DebugMacros.h"
 #include "AnimInstances/PlayerAnimInstance.h"
+#include "Components/CombatComponent.h"
 #include "Animation/AnimMontage.h"
 
 void ABaseWeapon::OnEquipped(ASoulslikeCombatCharacter* PlayerCharacter)
 {
-	//Super::OnEquipped(PlayerCharacter);
+	if (!PlayerCharacter) return;
 
-	FName SocketName;
-	SetIsEquipped(true);
+	Super::OnEquipped(PlayerCharacter);
 
-	if (PlayerCharacter)
+	PlayerCombatComponent = PlayerCharacter->GetCombatComponent();
+
+	if (PlayerCombatComponent)
 	{
-		switch (PlayerCharacter->IsCombatEnabled())
-		{
-		case false:
-			SocketName = AttachSocketName;
-			break;
-
-		case true:
-			SocketName = HandSocketName;
-			break;
-		}
-
+		FName SocketName = PlayerCombatComponent->IsCombatEnabled() ? HandSocketName : AttachSocketName;
 		AttachActor(SocketName, PlayerCharacter);
-		PlayerCharacter->SetNewMainWeapon(this);
-		UPlayerAnimInstance* PlayerAnimInstanceVar = Cast<UPlayerAnimInstance>(PlayerCharacter->GetMesh()->GetAnimInstance());
+		PlayerCombatComponent->SetMainWeapon(this);
 
-		if (PlayerAnimInstanceVar)
+		if (UPlayerAnimInstance* PlayerAnimInstanceVar = Cast<UPlayerAnimInstance>(PlayerCharacter->GetMesh()->GetAnimInstance()))
 		{
 			PlayerAnimInstanceVar->UpdateCombatType(CombatType);
-			//DEBUG_PRINT2(CombatType);
 		}
 	}
 }

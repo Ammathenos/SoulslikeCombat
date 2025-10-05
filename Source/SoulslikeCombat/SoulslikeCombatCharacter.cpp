@@ -11,6 +11,7 @@
 #include "AnimNotifies/AttachWeaponActor.h"
 #include "Interfaces/Interactable.h"
 #include "Interfaces/AnimationInstance.h"
+#include "Components/CombatComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -54,6 +55,8 @@ ASoulslikeCombatCharacter::ASoulslikeCombatCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	CombatComponent = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
+
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
@@ -71,17 +74,6 @@ void ASoulslikeCombatCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
-}
-
-void ASoulslikeCombatCharacter::SetNewMainWeapon(TObjectPtr<ABaseWeapon> NewWeapon)
-{
-	if (MainWeapon)
-	{
-		MainWeapon->OnUnequipped();
-		MainWeapon->Destroy();
-	}
-
-	MainWeapon = NewWeapon;
 }
 
 void ASoulslikeCombatCharacter::SetCombatEnabled(bool CombatEnabledLocal)
@@ -164,20 +156,21 @@ void ASoulslikeCombatCharacter::ToggleCombat(const FInputActionValue& Value)
 {
 	if (Controller != nullptr)
 	{
-		if (MainWeapon)
+		ABaseWeapon* PlayerWeapon = CombatComponent->GetMainWeapon();
+		if (PlayerWeapon)
 		{
-			switch (IsCombatEnabled())
+			switch (CombatComponent->IsCombatEnabled())
 			{
 			//Sheath Weapon
 			case true:
-				PlayAnimMontage(MainWeapon->ReturnExitCombatAnimMontage());
-				SetCombatEnabled(false);
+				PlayAnimMontage(PlayerWeapon->ReturnExitCombatAnimMontage());
+				CombatComponent->SetCombatEnabled(false);
 				break;
 
 			//Draw Weapon
 			case false:
-				PlayAnimMontage(MainWeapon->ReturnEnterCombatAnimMontage());
-				SetCombatEnabled(true);
+				PlayAnimMontage(PlayerWeapon->ReturnEnterCombatAnimMontage());
+				CombatComponent->SetCombatEnabled(true);
 				break;
 			}
 		}

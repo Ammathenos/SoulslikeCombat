@@ -10,6 +10,7 @@
 class ABaseEquippable;
 class ABaseWeapon;
 class UAttachWeaponActor;
+class UCombatComponent;
 
 UCLASS(config=Game)
 class ASoulslikeCombatCharacter : public ACharacter
@@ -48,6 +49,9 @@ class ASoulslikeCombatCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* InteractAction;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
+	UCombatComponent* CombatComponent;
+
 public:
 	ASoulslikeCombatCharacter();
 	
@@ -82,17 +86,17 @@ public:
 	//* Returns player MainWeapon 
 	FORCEINLINE TObjectPtr<ABaseWeapon> ReturnMainWeapon() { return MainWeapon; }
 	//* Sets player MainWeapon
-	FORCEINLINE void SetMainWeapon(TObjectPtr<ABaseWeapon> Weapon) { if (Weapon) MainWeapon = Weapon; }
+	FORCEINLINE void SetMainWeapon(TObjectPtr<ABaseWeapon> Weapon) { if (Weapon) MainWeapon = Weapon; } //Moved to CombatComponent, look for repath bugs
 
-	void SetNewMainWeapon(TObjectPtr<ABaseWeapon> NewWeapon);
+	FORCEINLINE TObjectPtr<UCombatComponent> GetCombatComponent() { return CombatComponent; }
 
-	void SetCombatEnabled(bool CombatEnabledLocal);
+	void SetCombatEnabled(bool CombatEnabledLocal); //Moved to CombatComponent, look for repath bugs
 
-	FORCEINLINE bool IsCombatEnabled() { return bCombatEnabled; };
+	FORCEINLINE bool IsCombatEnabled() { return bCombatEnabled; } //Moved to CombatComponent, look for repath bugs
 
 private:
 	UPROPERTY(EditAnywhere)
-		TObjectPtr<ABaseWeapon> MainWeapon;
+		TObjectPtr<ABaseWeapon> MainWeapon; //Moved to CombatComponent, look for repath bugs
 
 	UPROPERTY(EditAnywhere)
 		bool bCombatEnabled = false;

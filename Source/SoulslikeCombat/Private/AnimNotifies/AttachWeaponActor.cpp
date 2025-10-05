@@ -3,27 +3,25 @@
 
 #include "AnimNotifies/AttachWeaponActor.h"
 #include "SoulslikeCombat/SoulslikeCombatCharacter.h"
+#include "Components/CombatComponent.h"
 #include "Actors/BaseWeapon.h"
 
 void UAttachWeaponActor::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
-	ASoulslikeCombatCharacter* PlayerCharacter;
+	if (!MeshComp) return;
 
-	PlayerCharacter = Cast<ASoulslikeCombatCharacter>(MeshComp->GetOwner());
-	
-	if (PlayerCharacter)
+	ASoulslikeCombatCharacter* PlayerCharacter = Cast<ASoulslikeCombatCharacter>(MeshComp->GetOwner());
+	if (!PlayerCharacter) return;
+
+	UCombatComponent* PlayerCombatComponent = PlayerCharacter->GetCombatComponent();
+	if (!PlayerCombatComponent) return;
+
+	if (ABaseWeapon* PlayerWeapon =  PlayerCombatComponent->GetMainWeapon())
 	{
-		ABaseWeapon* MainWeapon = PlayerCharacter->ReturnMainWeapon();
-		
-		switch (AttachToHand)
-		{
-		case false:
-			MainWeapon->AttachActor(MainWeapon->ReturnAttachSocketName(), PlayerCharacter);
-			break;
+		FName SocketName = AttachToHand ? PlayerWeapon->ReturnHandSocketName() : PlayerWeapon->ReturnAttachSocketName();
 
-		case true:
-			MainWeapon->AttachActor(MainWeapon->ReturnHandSocketName(), PlayerCharacter);
-			break;
-		}
+		PlayerWeapon->AttachActor(SocketName, PlayerCharacter);
+
+		
 	}
 }

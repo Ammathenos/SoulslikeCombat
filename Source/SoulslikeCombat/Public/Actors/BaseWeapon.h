@@ -8,6 +8,7 @@
 #include "BaseWeapon.generated.h"
 
 class UAnimMontage;
+class UCombatComponent;
 
 UCLASS()
 class SOULSLIKECOMBAT_API ABaseWeapon : public ABaseEquippable
@@ -36,6 +37,9 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, Category = "Initialization")
 		ECombatTypes CombatType = ECombatTypes::ECT_None;
+
+	UPROPERTY(VisibleAnywhere)
+		UCombatComponent* PlayerCombatComponent;
 
 private:
 };
