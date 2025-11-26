@@ -1,0 +1,1 @@
+This is a personal project that im doing in purpose of learning the basics of Game Development, im using the combat style of Soulslike games as inspiration to try and reproduce it here, so it is still not focused on being enjoyable to play.
